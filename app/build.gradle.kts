@@ -100,6 +100,9 @@ dependencies {
     // Calendar
     implementation(libs.compose.calendar)
     
+    // Excel Export (Apache POI)
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

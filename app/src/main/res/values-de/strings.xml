@@ -129,4 +129,15 @@
     <string name="security_alert">Sicherheitswarnung</string>
     <string name="security_desc">Ihr Kontopasswort wurde gerade geändert. Wenn Sie dies nicht waren, kontaktieren Sie bitte den Support.</string>
     <string name="copyright">© 2025 File Tracker. Alle Rechte vorbehalten.</string>
+    <string name="export_data">Daten exportieren (Archiv)</string>
+    <string name="export_excel">Nach Excel exportieren</string>
+    <string name="no_records_to_export">Keine Datensätze zum Exportieren</string>
+    <string name="export_success">Daten erfolgreich exportiert</string>
+    <string name="export_error">Fehler beim Exportieren der Daten</string>
+    <string name="opening_file">Datei wird geöffnet...</string>
+    <string name="wipe_data">Alle Daten löschen</string>
+    <string name="wipe_data_desc">Alle Datensätze und Anhänge werden dauerhaft gelöscht</string>
+    <string name="wipe_confirm_title">Sind Sie sicher?</string>
+    <string name="wipe_confirm_msg">Dadurch werden alle Dokumente und Fotos dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="wipe_success">Alle Daten wurden gelöscht</string>
 </resources>

@@ -133,4 +133,15 @@
     <string name="copyright">© 2025 File Tracker. All rights reserved.</string>
     <string name="error_open_pdf">Cannot open PDF</string>
     <string name="open_pdf_with">Open PDF with...</string>
+    <string name="export_data">Export Data (Archive)</string>
+    <string name="export_excel">Export to Excel</string>
+    <string name="no_records_to_export">No records to export</string>
+    <string name="export_success">Data exported successfully</string>
+    <string name="export_error">Error exporting data</string>
+    <string name="opening_file">Opening file...</string>
+    <string name="wipe_data">Wipe All Data</string>
+    <string name="wipe_data_desc">All records and attachments will be permanently deleted</string>
+    <string name="wipe_confirm_title">Are you sure?</string>
+    <string name="wipe_confirm_msg">This will permanently delete all documents and photos. This action cannot be undone.</string>
+    <string name="wipe_success">All data has been cleared</string>
 </resources>

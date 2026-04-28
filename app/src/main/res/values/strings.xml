@@ -131,4 +131,15 @@
     <string name="copyright">© 2025 File Tracker. جميع الحقوق محفوظة.</string>
     <string name="error_open_pdf">تعذر فتح ملف PDF</string>
     <string name="open_pdf_with">فتح ملف PDF بواسطة...</string>
+    <string name="export_data">تصدير البيانات (أرشيف)</string>
+    <string name="export_excel">تصدير إلى Excel</string>
+    <string name="no_records_to_export">لا توجد سجلات للتصدير</string>
+    <string name="export_success">تم تصدير البيانات بنجاح</string>
+    <string name="export_error">حدث خطأ أثناء التصدير</string>
+    <string name="opening_file">جاري فتح الملف...</string>
+    <string name="wipe_data">مسح جميع البيانات</string>
+    <string name="wipe_data_desc">سيتم حذف جميع السجلات والمرفقات بشكل نهائي</string>
+    <string name="wipe_confirm_title">هل أنت متأكد؟</string>
+    <string name="wipe_confirm_msg">سيؤدي هذا الإجراء إلى حذف جميع الوثائق والصور بشكل دائم. لا يمكن التراجع عن هذا الفعل.</string>
+    <string name="wipe_success">تم مسح جميع البيانات بنجاح</string>
 </resources>

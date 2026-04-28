@@ -190,6 +190,26 @@ class FileRecordRepository(private val context: Context) {
         }
     }
 
+    suspend fun wipeAllData() {
+        try {
+            // 1. Delete all JSON records
+            getRecordsDir().deleteRecursively()
+            // 2. Delete all JSON sources
+            getSourcesDir().deleteRecursively()
+            // 3. Delete all attachments
+            File(context.filesDir, "attachments").deleteRecursively()
+            // 4. Clear legacy SharedPreferences
+            prefs.edit().clear().apply()
+            // 5. Clear Room database
+            savedSourceDao.deleteAll()
+            // 6. Reset in-memory flows
+            _recordsFlow.value = emptyList()
+            _sourcesFlow.value = emptyList()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     // --- Saved Sources Persistence ---
 
     fun saveSource(source: SavedSource): Boolean {

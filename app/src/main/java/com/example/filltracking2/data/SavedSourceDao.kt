@@ -29,4 +29,7 @@ interface SavedSourceDao {
             insert(SavedSourceEntity(sourceName = sourceName))
         }
     }
+
+    @Query("DELETE FROM saved_sources")
+    suspend fun deleteAll()
 }

@@ -128,4 +128,15 @@
     <string name="update_button">Mettre à jour le document</string>
     <string name="confirm">Confirmer</string>
     <string name="copyright">© 2025 File Tracker. Tous droits réservés.</string>
+    <string name="export_data">Exporter les données (Archive)</string>
+    <string name="export_excel">Exporter vers Excel</string>
+    <string name="no_records_to_export">Aucun enregistrement à exporter</string>
+    <string name="export_success">Données exportées avec succès</string>
+    <string name="export_error">Erreur lors de l\'exportation des données</string>
+    <string name="opening_file">Ouverture du fichier...</string>
+    <string name="wipe_data">Effacer toutes les données</string>
+    <string name="wipe_data_desc">Tous les enregistrements et pièces jointes seront définitivement supprimés</string>
+    <string name="wipe_confirm_title">Êtes-vous sûr ?</string>
+    <string name="wipe_confirm_msg">Cela supprimera définitivement tous les documents et photos. Cette action est irréversible.</string>
+    <string name="wipe_success">Toutes les données ont été effacées</string>
 </resources>

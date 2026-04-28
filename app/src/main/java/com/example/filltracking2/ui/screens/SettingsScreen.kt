@@ -38,19 +38,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.filltracking2.R
 import com.example.filltracking2.ui.theme.ThemeManager
 import com.example.filltracking2.util.PreferenceManager
 import com.example.filltracking2.util.LocaleManager
+import com.example.filltracking2.ui.viewmodel.FileViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    viewModel: FileViewModel,
     currentUserEmail: String,
     currentPassword: String,
     onSignOut: () -> Unit
@@ -58,10 +63,37 @@ fun SettingsScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showSupportSheet by remember { mutableStateOf(false) }
 
     val currentLocale = LocaleManager.LocalAppLocale.current
     
+    val records by viewModel.records.collectAsStateWithLifecycle()
+    val exportState by viewModel.exportState.collectAsStateWithLifecycle()
+
+    val createDocumentLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    ) { uri ->
+        uri?.let { viewModel.exportToExcel(it) }
+    }
+
+    LaunchedEffect(exportState) {
+        when (val state = exportState) {
+            is FileViewModel.ExportState.Success -> {
+                snackbarHostState.showSnackbar(
+                    message = context.getString(R.string.export_success),
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.resetExportState()
+            }
+            is FileViewModel.ExportState.Error -> {
+                snackbarHostState.showSnackbar(state.message)
+                viewModel.resetExportState()
+            }
+            else -> {}
+        }
+    }
+
     val languageMap = mapOf(
         "en" to "English",
         "fr" to "Français",
@@ -97,7 +129,8 @@ fun SettingsScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.settings), fontWeight = FontWeight.Bold) }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -246,6 +279,55 @@ fun SettingsScreen(
 
             // Data & Storage
             SettingsSection(title = "Data & Storage") {
+                val isExporting = exportState is FileViewModel.ExportState.Loading
+                
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(enabled = !isExporting) {
+                            if (records.isEmpty()) {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(context.getString(R.string.no_records_to_export))
+                                }
+                            } else {
+                                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                                createDocumentLauncher.launch("FillTracking_$date.xlsx")
+                            }
+                        }
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.FileDownload,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            stringResource(R.string.export_excel),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            stringResource(R.string.export_data),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    if (isExporting) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.ChevronRight,
+                            null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
                 SettingsInfoItem(
                     icon = Icons.Default.Storage,
                     title = "App Storage",
@@ -256,6 +338,64 @@ fun SettingsScreen(
                     title = "Device Storage",
                     value = getDeviceStorageInfo()
                 )
+
+                // Wipe Data Button
+                var showWipeDialog by remember { mutableStateOf(false) }
+                
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showWipeDialog = true }
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.DeleteForever,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            stringResource(R.string.wipe_data),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Text(
+                            stringResource(R.string.wipe_data_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+
+                if (showWipeDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showWipeDialog = false },
+                        title = { Text(stringResource(R.string.wipe_confirm_title)) },
+                        text = { Text(stringResource(R.string.wipe_confirm_msg)) },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    viewModel.wipeAllData {
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(context.getString(R.string.wipe_success))
+                                        }
+                                    }
+                                    showWipeDialog = false
+                                },
+                                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                            ) {
+                                Text(stringResource(R.string.delete))
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showWipeDialog = false }) {
+                                Text(stringResource(R.string.cancel))
+                            }
+                        }
+                    )
+                }
             }
 
             // About Group

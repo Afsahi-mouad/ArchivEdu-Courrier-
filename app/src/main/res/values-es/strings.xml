@@ -129,4 +129,15 @@
     <string name="security_alert">Alerta de seguridad</string>
     <string name="security_desc">La contraseña de su cuenta acaba de ser cambiada. Si no fue usted, contacte con soporte.</string>
     <string name="copyright">© 2025 File Tracker. Todos los derechos reservados.</string>
+    <string name="export_data">Exportar datos (Archivo)</string>
+    <string name="export_excel">Exportar a Excel</string>
+    <string name="no_records_to_export">No hay registros para exportar</string>
+    <string name="export_success">Datos exportados con éxito</string>
+    <string name="export_error">Error al exportar datos</string>
+    <string name="opening_file">Abriendo archivo...</string>
+    <string name="wipe_data">Borrar todos los datos</string>
+    <string name="wipe_data_desc">Todos los registros y adjuntos se eliminarán permanentemente</string>
+    <string name="wipe_confirm_title">¿Estás seguro?</string>
+    <string name="wipe_confirm_msg">Esto eliminará permanentemente todos los documentos y fotos. Esta acción no se puede deshacer.</string>
+    <string name="wipe_success">Todos los datos han sido borrados</string>
 </resources>

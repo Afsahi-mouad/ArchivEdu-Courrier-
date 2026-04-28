@@ -1,6 +1,7 @@
 package com.example.filltracking2.ui.viewmodel
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filltracking2.data.FileRecord
@@ -45,6 +46,38 @@ class FileViewModel(application: Application) : AndroidViewModel(application) {
     fun openImageViewer(images: List<String>, index: Int) {
         _viewerImages.value = images
         _viewerInitialIndex.value = index
+    }
+
+    // Export state
+    sealed class ExportState {
+        object Idle : ExportState()
+        object Loading : ExportState()
+        data class Success(val uri: Uri) : ExportState()
+        data class Error(val message: String) : ExportState()
+    }
+    private val _exportState = MutableStateFlow<ExportState>(ExportState.Idle)
+    val exportState: StateFlow<ExportState> = _exportState.asStateFlow()
+
+    fun resetExportState() {
+        _exportState.value = ExportState.Idle
+    }
+
+    fun exportToExcel(uri: Uri) {
+        viewModelScope.launch {
+            _exportState.value = ExportState.Loading
+            val success = withContext(Dispatchers.IO) {
+                com.example.filltracking2.util.ExcelExporter.exportToExcel(
+                    getApplication(),
+                    uri,
+                    records.value
+                )
+            }
+            if (success) {
+                _exportState.value = ExportState.Success(uri)
+            } else {
+                _exportState.value = ExportState.Error("فشل تصدير البيانات")
+            }
+        }
     }
 
     init {
@@ -198,6 +231,24 @@ class FileViewModel(application: Application) : AndroidViewModel(application) {
                 // Delete associated attachment files
                 record.attachments.forEach { attachment ->
                     com.example.filltracking2.data.AttachmentStorage.deleteAttachment(attachment.path)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun wipeAllData(onComplete: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // 1. Clear in-memory list
+                FileRecordRepository.updateRecords(emptyList())
+
+                // 2. Delete all JSON files and attachments
+                repository.wipeAllData()
+
+                withContext(Dispatchers.Main) {
+                    onComplete()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

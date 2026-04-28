@@ -59,11 +59,15 @@ fun FillTrackingApp() {
     var isLoggedIn by rememberSaveable { mutableStateOf(false) }
     var currentUserEmail by rememberSaveable { mutableStateOf("") }
 
-    val currentLocaleCode by PreferenceManager.getLocale(context).collectAsStateWithLifecycle(initialValue = "ar")
+    val currentLocaleCode by PreferenceManager.getLocale(context).collectAsStateWithLifecycle(initialValue = null)
 
     LaunchedEffect(currentLocaleCode) {
-        PreferenceManager.applyLocale(currentLocaleCode)
+        currentLocaleCode?.let {
+            PreferenceManager.applyLocale(it)
+        }
     }
+
+    if (currentLocaleCode == null) return
 
     val activity = remember(context) {
         var c = context
@@ -80,9 +84,9 @@ fun FillTrackingApp() {
     }
 
     CompositionLocalProvider(
-        LocalContext provides LocaleManager.wrapContext(context, currentLocaleCode),
+        LocalContext provides LocaleManager.wrapContext(context, currentLocaleCode!!),
         LocalActivityResultRegistryOwner provides activity,
-        LocaleManager.LocalAppLocale provides currentLocaleCode
+        LocaleManager.LocalAppLocale provides currentLocaleCode!!
     ) {
         val persistedPassword by PreferenceManager
             .getPassword(LocalContext.current)
@@ -210,6 +214,7 @@ fun FillTrackingApp() {
                         }
                         composable(Screen.Settings.route) {
                             SettingsScreen(
+                                viewModel = fileViewModel,
                                 currentUserEmail = currentUserEmail,
                                 currentPassword = persistedPassword,
                                 onSignOut = { isLoggedIn = false }

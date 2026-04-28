@@ -29,7 +29,13 @@ object PreferenceManager {
 
     fun applyLocale(languageCode: String) {
         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageCode)
-        AppCompatDelegate.setApplicationLocales(appLocale)
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        
+        // Only apply if the requested locale is different from the current one
+        // to prevent activity recreation loops
+        if (currentLocales.toLanguageTags() != languageCode) {
+            AppCompatDelegate.setApplicationLocales(appLocale)
+        }
     }
 
     // Password Management
