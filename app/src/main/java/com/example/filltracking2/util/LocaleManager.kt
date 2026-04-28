@@ -6,7 +6,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import java.util.Locale
 
 object LocaleManager {
-    val LocalAppLocale = staticCompositionLocalOf { "en" }
+    val LocalAppLocale = staticCompositionLocalOf { "ar" }
 
     fun wrapContext(context: Context, language: String): Context {
         val locale = Locale(language)

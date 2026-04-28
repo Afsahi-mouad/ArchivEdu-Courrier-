@@ -172,10 +172,17 @@ class FileViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateRecord(record: FileRecord) {
+        val previousRecord = records.value.find { it.id == record.id }
         FileRecordRepository.updateRecordInList(record)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 repository.saveRecord(record)
+                val currentAttachmentPaths = record.attachments.map { it.path }.toSet()
+                previousRecord?.attachments
+                    ?.asSequence()
+                    ?.map { it.path }
+                    ?.filterNot { it in currentAttachmentPaths }
+                    ?.forEach { com.example.filltracking2.data.AttachmentStorage.deleteAttachment(it) }
             } catch (e: Exception) {
                 e.printStackTrace()
             }

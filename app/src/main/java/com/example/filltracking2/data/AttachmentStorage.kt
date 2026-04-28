@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Locale
 import java.util.UUID
 
 /**
@@ -50,6 +51,9 @@ object AttachmentStorage {
             }
             
             fileType = contentResolver.getType(sourceUri) ?: "application/octet-stream"
+            if (fileName.lowercase(Locale.ROOT).endsWith(".pdf")) {
+                fileType = "application/pdf"
+            }
 
             val destFile = File(getAttachmentsDir(context), "file_${UUID.randomUUID()}_$fileName")
             FileOutputStream(destFile).use { outputStream ->

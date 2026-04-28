@@ -294,6 +294,11 @@ fun ChangePasswordForm(currentStoredPassword: String, onPasswordUpdated: (String
     var currentInput by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    
+    var currentVisible by remember { mutableStateOf(false) }
+    var newVisible by remember { mutableStateOf(false) }
+    var confirmVisible by remember { mutableStateOf(false) }
+    
     var error by remember { mutableStateOf<String?>(null) }
     
     var showSecurityAlert by remember { mutableStateOf(false) }
@@ -303,21 +308,36 @@ fun ChangePasswordForm(currentStoredPassword: String, onPasswordUpdated: (String
             value = currentInput,
             onValueChange = { currentInput = it; error = null },
             label = { Text(stringResource(R.string.current_password)) },
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (currentVisible) androidx.compose.ui.text.input.VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { currentVisible = !currentVisible }) {
+                    Icon(if (currentVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility, null)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = newPassword,
             onValueChange = { newPassword = it; error = null },
             label = { Text(stringResource(R.string.new_password)) },
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (newVisible) androidx.compose.ui.text.input.VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { newVisible = !newVisible }) {
+                    Icon(if (newVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility, null)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it; error = null },
             label = { Text(stringResource(R.string.confirm_password)) },
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (confirmVisible) androidx.compose.ui.text.input.VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { confirmVisible = !confirmVisible }) {
+                    Icon(if (confirmVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility, null)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 

@@ -19,12 +19,12 @@ object PreferenceManager {
 
     // Locale Management
     fun getLocale(context: Context): Flow<String> = context.dataStore.data.map { 
-        it[SELECTED_LANGUAGE] ?: "en" 
+        it[SELECTED_LANGUAGE] ?: "ar"
     }
 
     suspend fun setLocale(context: Context, languageCode: String) {
         context.dataStore.edit { it[SELECTED_LANGUAGE] = languageCode }
-        // Removed applyLocale to prevent activity restart
+        applyLocale(languageCode)
     }
 
     fun applyLocale(languageCode: String) {

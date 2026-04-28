@@ -33,14 +33,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
-import coil.compose.AsyncImage
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.example.filltracking2.R
 import com.example.filltracking2.data.Attachment
 import com.example.filltracking2.data.AttachmentStorage
 import com.example.filltracking2.data.FileRecord
 import com.example.filltracking2.ui.theme.StatusUrgent
-import com.example.filltracking2.ui.theme.ThemeManager
+import com.example.filltracking2.util.AttachmentOpener
 import com.example.filltracking2.ui.viewmodel.FileViewModel
 import java.io.File
 import java.time.Instant
@@ -62,8 +62,11 @@ fun NewFileScreen(
     onOpenImageViewer: () -> Unit
 ) {
     val context = LocalContext.current
-    val recordToEdit = remember(editingRecordId) {
-        editingRecordId?.let { viewModel.getRecordBySerial(it) }
+    val records by viewModel.records.collectAsStateWithLifecycle()
+    val recordToEdit = remember(editingRecordId, records) {
+        editingRecordId?.let { serial ->
+            records.find { it.internalSerial == serial || it.originalSerial == serial }
+        }
     }
 
     val savedSources by viewModel.savedSourcesFromRoom.collectAsStateWithLifecycle()
@@ -78,45 +81,52 @@ fun NewFileScreen(
     val years = listOf("24", "25", "26", "27")
     
     // Original Serial
-    var selectedYear by remember { 
-        mutableStateOf(recordToEdit?.originalSerial?.split("/")?.getOrNull(0) ?: "26") 
-    }
-    var originalSerialDigits by remember { 
-        mutableStateOf(recordToEdit?.originalSerial?.split("/")?.getOrNull(1) ?: "") 
-    }
+    var selectedYear by remember(editingRecordId) { mutableStateOf("26") }
+    var originalSerialDigits by remember(editingRecordId) { mutableStateOf("") }
     
     // Internal Serial
-    var internalYear by remember { 
-        mutableStateOf(recordToEdit?.internalSerial?.split("/")?.getOrNull(0) ?: "26") 
-    }
-    var internalSerialDigits by remember { 
-        mutableStateOf(recordToEdit?.internalSerial?.split("/")?.getOrNull(1) ?: "") 
-    }
+    var internalYear by remember(editingRecordId) { mutableStateOf("26") }
+    var internalSerialDigits by remember(editingRecordId) { mutableStateOf("") }
 
     var yearDropdownExpanded by remember { mutableStateOf(false) }
     var internalYearDropdownExpanded by remember { mutableStateOf(false) }
 
-    var recipientName by remember { mutableStateOf(recordToEdit?.recipientName ?: "") }
-    var subject by remember { mutableStateOf(recordToEdit?.subject ?: "") }
+    var recipientName by remember(editingRecordId) { mutableStateOf("") }
+    var subject by remember(editingRecordId) { mutableStateOf("") }
     
     // Source State
     var sourceDropdownExpanded by remember { mutableStateOf(false) }
-    var selectedSourceText by remember { mutableStateOf(recordToEdit?.source ?: "") }
+    var selectedSourceText by remember { mutableStateOf("") }
     var customSourceText by remember { mutableStateOf("") }
     var isOtherSelected by remember { mutableStateOf(false) }
+    var selectedSourceResId by remember { mutableStateOf<Int?>(null) }
     
     // Determine initial dropdown selection
     LaunchedEffect(recordToEdit, savedSources) {
-        recordToEdit?.let { record ->
-            val isDefault = defaultSources.any { context.getString(it) == record.source }
+        if (recordToEdit != null) {
+            val record = recordToEdit
+            selectedSourceText = record.source
             
-            if (isDefault) {
-                selectedSourceText = record.source
+            // Try to find matching resId across all supported languages to avoid stale text
+            val languages = listOf("en", "fr", "ar", "es", "de")
+            var foundResId: Int? = null
+            outer@for (resId in defaultSources) {
+                for (lang in languages) {
+                    val config = android.content.res.Configuration(context.resources.configuration)
+                    config.setLocale(Locale.forLanguageTag(lang))
+                    if (context.createConfigurationContext(config).getString(resId) == record.source) {
+                        foundResId = resId
+                        break@outer
+                    }
+                }
+            }
+            selectedSourceResId = foundResId
+            
+            if (foundResId != null) {
                 isOtherSelected = false
             } else if (record.source.isNotEmpty()) {
                 val isSavedCustom = savedSources.any { it.sourceName == record.source }
                 if (isSavedCustom) {
-                    selectedSourceText = record.source
                     isOtherSelected = false
                 } else {
                     // It was a custom source but not in Room yet (or typed via Other)
@@ -125,17 +135,22 @@ fun NewFileScreen(
                     isOtherSelected = true
                 }
             }
+        } else {
+            selectedSourceResId = null
+            selectedSourceText = ""
+            isOtherSelected = false
+            customSourceText = ""
         }
     }
 
-    var notes by remember { mutableStateOf(recordToEdit?.notes ?: "") }
-    var selectedUrgency by remember { mutableStateOf(recordToEdit?.urgency ?: "Normal") }
-    var selectedSectors by remember { mutableStateOf(recordToEdit?.sectors?.toSet() ?: setOf<String>()) }
+    var notes by remember(editingRecordId) { mutableStateOf("") }
+    var selectedUrgency by remember(editingRecordId) { mutableStateOf("Normal") }
+    var selectedSectors by remember(editingRecordId) { mutableStateOf(setOf<String>()) }
     
     val today = FileViewModel.getCurrentDate()
-    var dateReceivedGov by remember { mutableStateOf(recordToEdit?.dateReceivedGov ?: today) }
-    var dateDeliveredToDomain by remember { mutableStateOf(recordToEdit?.dateDeliveredToDomain ?: today) }
-    var dateRegistered by remember { mutableStateOf(recordToEdit?.dateRegistered ?: today) }
+    var dateReceivedGov by remember(editingRecordId) { mutableStateOf(today) }
+    var dateDeliveredToDomain by remember(editingRecordId) { mutableStateOf(today) }
+    var dateRegistered by remember(editingRecordId) { mutableStateOf(today) }
 
     var showReceivedPicker by remember { mutableStateOf(false) }
     var showDeliveredPicker by remember { mutableStateOf(false) }
@@ -147,16 +162,34 @@ fun NewFileScreen(
     LaunchedEffect(deliveredPickerState.selectedDateMillis) { deliveredPickerState.selectedDateMillis?.let { dateDeliveredToDomain = formatDate(it) } }
 
     if (showReceivedPicker) {
-        DatePickerDialog(onDismissRequest = { showReceivedPicker = false }, confirmButton = { TextButton(onClick = { showReceivedPicker = false }) { Text("OK") } }) { DatePicker(state = receivedPickerState) }
+        DatePickerDialog(onDismissRequest = { showReceivedPicker = false }, confirmButton = { TextButton(onClick = { showReceivedPicker = false }) { Text(context.getString(android.R.string.ok)) } }) { DatePicker(state = receivedPickerState) }
     }
     if (showDeliveredPicker) {
-        DatePickerDialog(onDismissRequest = { showDeliveredPicker = false }, confirmButton = { TextButton(onClick = { showDeliveredPicker = false }) { Text("OK") } }) { DatePicker(state = deliveredPickerState) }
+        DatePickerDialog(onDismissRequest = { showDeliveredPicker = false }, confirmButton = { TextButton(onClick = { showDeliveredPicker = false }) { Text(context.getString(android.R.string.ok)) } }) { DatePicker(state = deliveredPickerState) }
     }
 
-    var attachments by remember { mutableStateOf<List<Attachment>>(recordToEdit?.attachments ?: emptyList()) }
+    var attachments by remember(editingRecordId) { mutableStateOf<List<Attachment>>(emptyList()) }
     var tempCameraAttachment by remember { mutableStateOf<Attachment?>(null) }
     var attachmentError by remember { mutableStateOf<String?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(recordToEdit?.id, editingRecordId) {
+        if (editingRecordId != null && recordToEdit != null) {
+            selectedYear = recordToEdit.originalSerial.split("/").getOrNull(0) ?: "26"
+            originalSerialDigits = recordToEdit.originalSerial.split("/").getOrNull(1) ?: ""
+            internalYear = recordToEdit.internalSerial.split("/").getOrNull(0) ?: "26"
+            internalSerialDigits = recordToEdit.internalSerial.split("/").getOrNull(1) ?: ""
+            recipientName = recordToEdit.recipientName
+            subject = recordToEdit.subject
+            notes = recordToEdit.notes
+            selectedUrgency = recordToEdit.urgency
+            selectedSectors = recordToEdit.sectors.toSet()
+            dateReceivedGov = recordToEdit.dateReceivedGov
+            dateDeliveredToDomain = recordToEdit.dateDeliveredToDomain
+            dateRegistered = recordToEdit.dateRegistered
+            attachments = recordToEdit.attachments
+        }
+    }
 
     LaunchedEffect(attachmentError) { attachmentError?.let { snackbarHostState.showSnackbar(it, duration = SnackbarDuration.Long); attachmentError = null } }
 
@@ -230,21 +263,63 @@ fun NewFileScreen(
             Text(stringResource(R.string.identification), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
             
             Text(stringResource(R.string.original_serial), style = MaterialTheme.typography.labelMedium)
+            val originalFullSerial = "$selectedYear/$originalSerialDigits"
+            val isOriginalDuplicate = remember(originalFullSerial, records) {
+                originalSerialDigits.isNotEmpty() && records.any { it.originalSerial == originalFullSerial && it.id != recordToEdit?.id }
+            }
+            if (isOriginalDuplicate) {
+                Text(
+                    text = "⚠️ This serial number already exists",
+                    color = Color(0xFFF1C40F),
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 ExposedDropdownMenuBox(expanded = yearDropdownExpanded, onExpandedChange = { yearDropdownExpanded = it }, modifier = Modifier.width(110.dp)) {
                     OutlinedTextField(value = "$selectedYear/", onValueChange = {}, readOnly = true, label = { Text("Year") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(yearDropdownExpanded) }, modifier = Modifier.menuAnchor(), shape = RoundedCornerShape(12.dp))
                     ExposedDropdownMenu(expanded = yearDropdownExpanded, onDismissRequest = { yearDropdownExpanded = false }) { years.forEach { DropdownMenuItem(text = { Text("$it/") }, onClick = { selectedYear = it; yearDropdownExpanded = false }) } }
                 }
-                OutlinedTextField(value = originalSerialDigits, onValueChange = { if (it.length <= 4 && it.all { c -> c.isDigit() }) originalSerialDigits = it }, label = { Text("XXXX") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
+                OutlinedTextField(
+                    value = originalSerialDigits,
+                    onValueChange = { if (it.length <= 4 && it.all { c -> c.isDigit() }) originalSerialDigits = it },
+                    label = { Text("XXXX") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    isError = isOriginalDuplicate
+                )
             }
 
             Text(stringResource(R.string.internal_serial), style = MaterialTheme.typography.labelMedium)
+            val internalFullSerial = "$internalYear/$internalSerialDigits"
+            val isInternalDuplicate = remember(internalFullSerial, records) {
+                internalSerialDigits.isNotEmpty() && records.any { it.internalSerial == internalFullSerial && it.id != recordToEdit?.id }
+            }
+            if (isInternalDuplicate) {
+                Text(
+                    text = "⚠️ This serial number already exists",
+                    color = Color(0xFFF1C40F),
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 ExposedDropdownMenuBox(expanded = internalYearDropdownExpanded, onExpandedChange = { internalYearDropdownExpanded = it }, modifier = Modifier.width(110.dp)) {
                     OutlinedTextField(value = "$internalYear/", onValueChange = {}, readOnly = true, label = { Text("Year") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(internalYearDropdownExpanded) }, modifier = Modifier.menuAnchor(), shape = RoundedCornerShape(12.dp))
                     ExposedDropdownMenu(expanded = internalYearDropdownExpanded, onDismissRequest = { internalYearDropdownExpanded = false }) { years.forEach { DropdownMenuItem(text = { Text("$it/") }, onClick = { internalYear = it; internalYearDropdownExpanded = false }) } }
                 }
-                OutlinedTextField(value = internalSerialDigits, onValueChange = { if (it.length <= 4 && it.all { c -> c.isDigit() }) internalSerialDigits = it }, label = { Text("XXXX") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
+                OutlinedTextField(
+                    value = internalSerialDigits,
+                    onValueChange = { if (it.length <= 4 && it.all { c -> c.isDigit() }) internalSerialDigits = it },
+                    label = { Text("XXXX") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    isError = isInternalDuplicate
+                )
             }
 
             Text(stringResource(R.string.tracking_dates), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
@@ -254,7 +329,13 @@ fun NewFileScreen(
             }
             OutlinedTextField(value = dateRegistered, onValueChange = {}, readOnly = true, label = { Text(stringResource(R.string.registered_app)) }, enabled = false, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
 
-            OutlinedTextField(value = recipientName, onValueChange = { recipientName = it }, label = { Text(stringResource(R.string.recipient_name)) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
+            OutlinedTextField(
+                value = recipientName,
+                onValueChange = { if (it.all { c -> c.isLetter() || c.isWhitespace() }) recipientName = it },
+                label = { Text(stringResource(R.string.recipient_name)) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
+            )
             
             // --- Source Dropdown ---
             Text(stringResource(R.string.source_label), style = MaterialTheme.typography.labelMedium)
@@ -264,7 +345,7 @@ fun NewFileScreen(
                     onExpandedChange = { sourceDropdownExpanded = it }
                 ) {
                     OutlinedTextField(
-                        value = selectedSourceText,
+                        value = if (selectedSourceResId != null) stringResource(selectedSourceResId!!) else selectedSourceText,
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(R.string.source_label)) },
@@ -278,11 +359,11 @@ fun NewFileScreen(
                     ) {
                         // 1-3. Hardcoded Defaults
                         defaultSources.forEach { resId ->
-                            val name = stringResource(resId)
                             DropdownMenuItem(
-                                text = { Text(name) },
+                                text = { Text(context.getString(resId)) },
                                 onClick = {
-                                    selectedSourceText = name
+                                    selectedSourceResId = resId
+                                    selectedSourceText = context.getString(resId)
                                     isOtherSelected = false
                                     sourceDropdownExpanded = false
                                 }
@@ -294,6 +375,7 @@ fun NewFileScreen(
                             DropdownMenuItem(
                                 text = { Text(saved.sourceName) },
                                 onClick = {
+                                    selectedSourceResId = null
                                     selectedSourceText = saved.sourceName
                                     isOtherSelected = false
                                     sourceDropdownExpanded = false
@@ -303,8 +385,9 @@ fun NewFileScreen(
                         
                         // 5. Other (Always Last)
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.source_other)) },
+                            text = { Text(context.getString(R.string.source_other)) },
                             onClick = {
+                                selectedSourceResId = null
                                 selectedSourceText = context.getString(R.string.source_other)
                                 isOtherSelected = true
                                 sourceDropdownExpanded = false
@@ -359,13 +442,25 @@ fun NewFileScreen(
                         AttachmentPreview(
                             attachment = attachment,
                             onClick = {
-                                viewModel.openImageViewer(
-                                    attachments.map { it.path },
-                                    attachments.indexOf(attachment)
-                                )
-                                onOpenImageViewer()
+                                if (AttachmentOpener.isPdf(attachment)) {
+                                    if (!AttachmentOpener.openPdf(context, attachment)) {
+                                        Toast.makeText(context, context.getString(R.string.error_open_pdf), Toast.LENGTH_SHORT).show()
+                                    }
+                                } else {
+                                    val imageAttachments = attachments.filterNot(AttachmentOpener::isPdf)
+                                    val imagePaths = imageAttachments.map { it.path }
+                                    val imageIndex = imageAttachments.indexOf(attachment)
+                                    
+                                    viewModel.openImageViewer(imagePaths, imageIndex)
+                                    onOpenImageViewer()
+                                }
                             },
-                            onRemove = { attachments = attachments - attachment; AttachmentStorage.deleteAttachment(attachment.path) }
+                            onRemove = {
+                                attachments = attachments - attachment
+                                if (recordToEdit == null) {
+                                    AttachmentStorage.deleteAttachment(attachment.path)
+                                }
+                            }
                         )
                     }
                 }
@@ -382,10 +477,10 @@ fun NewFileScreen(
             val buttonText = if (recordToEdit != null) stringResource(R.string.update_button) else stringResource(R.string.register_button)
             Button(
                 onClick = { 
-                    val finalSource = if (isOtherSelected || selectedSourceText == context.getString(R.string.source_other)) {
-                        customSourceText.trim()
-                    } else {
-                        selectedSourceText
+                    val finalSource = when {
+                        isOtherSelected -> customSourceText.trim()
+                        selectedSourceResId != null -> context.getString(selectedSourceResId!!)
+                        else -> selectedSourceText
                     }
 
                     if (finalSource.length < 2) {
@@ -438,7 +533,7 @@ fun NewFileScreen(
 @Composable
 fun AttachmentPreview(attachment: Attachment, onClick: () -> Unit, onRemove: () -> Unit) {
     Box(modifier = Modifier.size(80.dp).clip(RoundedCornerShape(8.dp)).clickable { onClick() }) {
-        if (attachment.type == "application/pdf") {
+        if (AttachmentOpener.isPdf(attachment)) {
             Box(
                 modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.secondaryContainer),
                 contentAlignment = Alignment.Center

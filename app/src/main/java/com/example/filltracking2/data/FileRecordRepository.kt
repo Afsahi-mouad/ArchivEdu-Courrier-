@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class FileRecordRepository(private val context: Context) {
@@ -147,7 +150,20 @@ class FileRecordRepository(private val context: Context) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return records.sortedByDescending { it.dateRegistered } // Sort by date or id as needed
+        return records.sortedWith(
+            compareByDescending<FileRecord> { parseRegisteredDate(it.dateRegistered) }
+                .thenByDescending { it.id }
+        )
+    }
+
+    private fun parseRegisteredDate(date: String): LocalDate? {
+        val formatters = listOf(
+            DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
+        )
+        return formatters.firstNotNullOfOrNull { formatter ->
+            runCatching { LocalDate.parse(date, formatter) }.getOrNull()
+        }
     }
 
 

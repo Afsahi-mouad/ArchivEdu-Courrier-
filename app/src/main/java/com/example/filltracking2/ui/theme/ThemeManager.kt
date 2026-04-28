@@ -172,9 +172,9 @@ object ThemeManager {
             "subject" to "الموضوع",
             "tracking_dates" to "تاريخ التتبع",
             "received_gov" to "استلام (حكومي)",
-            "delivered_sector" to "قطاع التسليم",
+            "delivered_sector" to "مصلحة التسليم",
             "registered_app" to "مسجل في التطبيق",
-            "destination_sectors" to "القطاعات المستهدفة",
+            "destination_sectors" to "المصالح المستهدفة",
             "attachments" to "المرفقات",
             "camera" to "الكاميرا",
             "gallery" to "المعرض",
@@ -187,7 +187,7 @@ object ThemeManager {
             "tracking_timeline" to "الجدول الزمني للتتبع",
             "received_gov_label" to "استلام (حكومي)",
             "registered_label" to "مسجل في التطبيق",
-            "delivered_label" to "سلمت للقطاع",
+            "delivered_label" to "سلمت للمصلحة",
             "doc_not_found" to "الوثيقة غير موجودة"
         ),
         "Deutsch" to mapOf(

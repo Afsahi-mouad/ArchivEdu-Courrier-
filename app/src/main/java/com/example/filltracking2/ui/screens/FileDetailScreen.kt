@@ -1,6 +1,5 @@
 package com.example.filltracking2.ui.screens
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,12 +22,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import coil.compose.SubcomposeAsyncImage
 import com.example.filltracking2.R
-import com.example.filltracking2.data.Attachment
-import com.example.filltracking2.ui.theme.ThemeManager
 import com.example.filltracking2.ui.viewmodel.FileViewModel
+import com.example.filltracking2.util.AttachmentOpener
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,28 +132,17 @@ fun FileDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text("${stringResource(R.string.attachments)} (${record.attachments.size})", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
                     val context = LocalContext.current
+                    val errorOpenPdf = stringResource(R.string.error_open_pdf)
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         record.attachments.forEach { attachment ->
-                            if (attachment.type == "application/pdf") {
+                            if (AttachmentOpener.isPdf(attachment)) {
                                 Surface(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(80.dp)
                                         .clickable {
-                                            try {
-                                                val file = File(attachment.path)
-                                                val uri = FileProvider.getUriForFile(
-                                                    context,
-                                                    "${context.packageName}.fileprovider",
-                                                    file
-                                                )
-                                                val intent = Intent(Intent.ACTION_VIEW).apply {
-                                                    setDataAndType(uri, "application/pdf")
-                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                                }
-                                                context.startActivity(intent)
-                                            } catch (e: Exception) {
-                                                android.widget.Toast.makeText(context, "Cannot open PDF", android.widget.Toast.LENGTH_SHORT).show()
+                                            if (!AttachmentOpener.openPdf(context, attachment)) {
+                                                android.widget.Toast.makeText(context, errorOpenPdf, android.widget.Toast.LENGTH_SHORT).show()
                                             }
                                         },
                                     color = MaterialTheme.colorScheme.secondaryContainer,
@@ -184,10 +170,11 @@ fun FileDetailScreen(
                                         .clip(RoundedCornerShape(12.dp))
                                         .background(Color.LightGray)
                                         .clickable {
-                                            viewModel.openImageViewer(
-                                                record.attachments.map { it.path },
-                                                record.attachments.indexOf(attachment)
-                                            )
+                                            val imageAttachments = record.attachments.filterNot(AttachmentOpener::isPdf)
+                                            val imagePaths = imageAttachments.map { it.path }
+                                            val imageIndex = imageAttachments.indexOf(attachment)
+                                            
+                                            viewModel.openImageViewer(imagePaths, imageIndex)
                                             onOpenImageViewer()
                                         },
                                     contentScale = ContentScale.Fit,
