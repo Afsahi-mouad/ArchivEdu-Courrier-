@@ -76,6 +76,8 @@
     <string name="sector_inspection">Inspektion</string>
 
     <string name="doc_track">DocTrack</string>
+    <string name="documents">Dokumente</string>
+    <string name="security">Sicherheit</string>
     <string name="user_info">Direktor - 20. Apr. 2026</string>
     <string name="user_initials">DR</string>
     <string name="total">Gesamt</string>
@@ -84,6 +86,7 @@
     <string name="pending">Ausstehend</string>
     <string name="search_hint">Serie oder Betreff suchen...</string>
     <string name="all">Alle</string>
+    <string name="general_category">Allgemein</string>
     <string name="receiver">Empfänger</string>
     <string name="recent_files">NEUESTE DATEIEN</string>
     <string name="file_id_1">26-0001 - 10. Apr.</string>
@@ -140,4 +143,52 @@
     <string name="wipe_confirm_title">Sind Sie sicher?</string>
     <string name="wipe_confirm_msg">Dadurch werden alle Dokumente und Fotos dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
     <string name="wipe_success">Alle Daten wurden gelöscht</string>
+    <string name="help_faq">Hilfe / FAQ</string>
+    <string name="search_faq">FAQ durchsuchen...</string>
+
+    <!-- FAQ Content -->
+    <string name="faq_q_what_is">Was ist File Tracker?</string>
+    <string name="faq_a_what_is">Eine digitale Dokumentenmanagement-App für Verwaltungspersonal in marokkanischen Bildungseinrichtungen. Sie ersetzt papierbasierte Protokolle durch ein modernes, organisiertes System zur Verfolgung offizieller Dokumente.</string>
+
+    <string name="faq_q_who_can_use">Wer kann File Tracker nutzen?</string>
+    <string name="faq_a_who_can_use">Nur autorisiertes Verwaltungspersonal. Der Zugriff ist durch ein vom Administrator festgelegtes und verwaltetes Passwort geschützt.</string>
+
+    <string name="faq_q_languages">Welche Sprachen unterstützt die App?</string>
+    <string name="faq_a_languages">Arabisch (mit RTL-Layout), Französisch, Englisch, Deutsch und Spanisch. Die gesamte Benutzeroberfläche wechselt Sprache und Richtung.</string>
+
+    <string name="faq_q_register">Wie registriere ich ein neues Dokument?</string>
+    <string name="faq_a_register">Öffnen Sie die App, tippen Sie auf „Dokument registrieren“ und füllen Sie die staatliche Seriennummer, die interne Seriennummer, den Absender (Akademie, Präfektur, Ministerium usw.), den Betreff, die Prioritätsstufe, die Zielabteilung, die Daten und den Namen des Empfängers aus und fügen Sie optional Fotos oder ein PDF bei.</string>
+
+    <string name="faq_q_priority">Was ist der Unterschied zwischen normaler und dringender Priorität?</string>
+    <string name="faq_a_priority">Normale Dokumente folgen der Standardbearbeitung. Dringende Dokumente werden in der gesamten App rot hervorgehoben – im Dashboard, im Kalender und in den Abteilungsansichten –, damit das Personal sie sofort identifizieren und bearbeiten kann.</string>
+
+    <string name="faq_q_attachments">Kann ich Dateien an einen Dokumentendatensatz anhängen?</string>
+    <string name="faq_a_attachments">Ja. Sie können Fotos oder PDF-Dateien beim Registrieren oder Bearbeiten eines Dokuments anhängen.</string>
+
+    <string name="faq_q_find_date">Wie finde ich ein Dokument von einem bestimmten Datum?</string>
+    <string name="faq_a_find_date">Gehen Sie zur Kalenderansicht, tippen Sie auf ein beliebiges Datum, und alle an diesem Tag registrierten Dokumente werden angezeigt. Dringende werden rot angezeigt, normale grün.</string>
+
+    <string name="faq_q_dashboard_show">Was zeigt das Dashboard an?</string>
+    <string name="faq_a_dashboard_show">Der Startbildschirm zeigt die Gesamtzahl der heute registrierten Dokumente, wie viele dringend und wie viele normal sind. Durch Antippen der jeweiligen Zähler wird die Dokumentenliste entsprechend gefiltert.</string>
+
+    <string name="faq_q_sector_dash">Was ist das Sektor-Dashboard?</string>
+    <string name="faq_a_sector_dash">Es organisiert Dokumente nach Abteilungen (z. B. Bildungsangelegenheiten, Planung, Finanzen), sodass Abteilungsleiter schnell alle ihnen zugewiesenen Dokumente sehen können.</string>
+
+    <string name="faq_q_security">Wie wird die App gesichert?</string>
+    <string name="faq_a_security">Die App erfordert ein Passwort zum Anmelden. Nur autorisiertes Personal kann darauf zugreifen. Der Administrator kann das Passwort jederzeit in den Einstellungen ändern.</string>
+
+    <string name="faq_q_forgot_pw">Was passiert, wenn ich das Passwort vergesse?</string>
+    <string name="faq_a_forgot_pw">Wenden Sie sich an Ihren Administrator. Das Passwort kann vom Administrator über den Einstellungsbildschirm zurückgesetzt werden.</string>
+
+    <string name="faq_q_change_lang">Wie ändere ich die Sprache?</string>
+    <string name="faq_a_change_lang">Gehen Sie zu den Einstellungen und wählen Sie Ihre bevorzugte Sprache aus. Die App wechselt sofort, einschließlich der Layoutrichtung für Arabisch.</string>
+
+    <string name="faq_q_export">Kann ich Dokumentendatensätze exportieren?</string>
+    <string name="faq_a_export">Ja. In den Einstellungen können Sie alle Datensätze in eine Excel-Datei exportieren.</string>
+
+    <string name="faq_q_dark_mode">Unterstützt die App den Dunkelmodus?</string>
+    <string name="faq_a_dark_mode">Ja. Sie können in den Einstellungen zwischen dunklen und hellen Themen wechseln.</string>
+
+    <string name="faq_q_notifications">Wie aktiviere oder deaktiviere ich Benachrichtigungen?</string>
+    <string name="faq_a_notifications">Schalten Sie Benachrichtigungen im Einstellungsbildschirm ein oder aus.</string>
 </resources>

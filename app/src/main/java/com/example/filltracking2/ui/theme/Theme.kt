@@ -40,12 +40,15 @@ private val DarkColorScheme = darkColorScheme(
     surface = SurfaceDark,
     surfaceVariant = SurfaceVariantDark,
     background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+    onSurface = OnSurfaceDark,
+    onSurfaceVariant = OnSurfaceVariantDark
 )
 
 @Composable
 fun FillTrackingTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

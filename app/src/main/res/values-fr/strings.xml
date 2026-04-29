@@ -80,6 +80,8 @@
     <string name="security_alert">Alerte de sécurité</string>
     <string name="security_desc">Le mot de passe de votre compte vient d\'être changé. Si vous n\'êtes pas à l\'origine de cette action, veuillez contacter le support.</string>
     <string name="doc_track">DocTrack</string>
+    <string name="documents">Documents</string>
+    <string name="security">Sécurité</string>
     <string name="user_info">Directeur - 20 avr. 2026</string>
     <string name="user_initials">DR</string>
     <string name="total">Total</string>
@@ -88,6 +90,7 @@
     <string name="pending">En attente</string>
     <string name="search_hint">Rechercher n° de série ou sujet...</string>
     <string name="all">Tout</string>
+    <string name="general_category">Général</string>
     <string name="receiver">Récepteur</string>
     <string name="recent_files">FICHIERS RÉCENTS</string>
     <string name="file_id_1">26-0001 - 10 avr.</string>
@@ -139,4 +142,52 @@
     <string name="wipe_confirm_title">Êtes-vous sûr ?</string>
     <string name="wipe_confirm_msg">Cela supprimera définitivement tous les documents et photos. Cette action est irréversible.</string>
     <string name="wipe_success">Toutes les données ont été effacées</string>
+    <string name="help_faq">Aide / FAQ</string>
+    <string name="search_faq">Rechercher dans la FAQ...</string>
+
+    <!-- FAQ Content -->
+    <string name="faq_q_what_is">Qu\'est-ce que File Tracker ?</string>
+    <string name="faq_a_what_is">Une application numérique de gestion de documents pour le personnel administratif des établissements d\'enseignement marocains. Elle remplace les registres papier par un système moderne et organisé pour le suivi des documents officiels.</string>
+
+    <string name="faq_q_who_can_use">Qui peut utiliser File Tracker ?</string>
+    <string name="faq_a_who_can_use">Uniquement le personnel administratif autorisé. L\'accès est protégé par un mot de passe défini et géré par l\'administrateur.</string>
+
+    <string name="faq_q_languages">Quelles langues l\'application prend-elle en charge ?</string>
+    <string name="faq_a_languages">L\'arabe (avec mise en page RTL), le français, l\'anglais, l\'allemand et l\'espagnol. L\'interface complète change de langue et de direction.</string>
+
+    <string name="faq_q_register">Comment enregistrer un nouveau document ?</string>
+    <string name="faq_a_register">Ouvrez l\'application, appuyez sur \"Enregistrer un document\" et remplissez le numéro de série gouvernemental, le numéro de série interne, l\'expéditeur (Académie, Préfecture, Ministère, etc.), le sujet, le niveau de priorité, le département de destination, les dates, le nom du destinataire et joignez éventuellement des photos ou un PDF.</string>
+
+    <string name="faq_q_priority">Quelle est la différence entre la priorité Normale et Urgente ?</string>
+    <string name="faq_a_priority">Les documents normaux suivent un traitement standard. Les documents urgents sont mis en évidence en rouge dans toute l\'application — dans le tableau de bord, le calendrier et les vues des départements — afin que le personnel puisse les identifier et agir immédiatement.</string>
+
+    <string name="faq_q_attachments">Puis-je joindre des fichiers à un enregistrement de document ?</string>
+    <string name="faq_a_attachments">Oui. Vous pouvez joindre des photos ou des fichiers PDF lors de l\'enregistrement ou de la modification d\'un document.</string>
+
+    <string name="faq_q_find_date">Comment trouver un document à une date précise ?</string>
+    <string name="faq_a_find_date">Accédez à la vue Calendrier, appuyez sur n\'importe quelle date et tous les documents enregistrés ce jour-là apparaîtront. Les urgents s\'affichent en rouge, les normaux en vert.</string>
+
+    <string name="faq_q_dashboard_show">Que montre le tableau de bord ?</string>
+    <string name="faq_a_dashboard_show">L\'écran d\'accueil affiche le nombre total de documents enregistrés aujourd\'hui, le nombre de documents urgents et le nombre de documents normaux. Appuyer sur chaque compteur filtre la liste des documents en conséquence.</string>
+
+    <string name="faq_q_sector_dash">Qu\'est-ce que le tableau de bord sectoriel ?</string>
+    <string name="faq_a_sector_dash">Il organise les documents par département (ex. : Affaires éducatives, Planification, Finances) afin que les chefs de département puissent voir rapidement tous les documents qui leur sont assignés.</string>
+
+    <string name="faq_q_security">Comment l\'application est-elle sécurisée ?</string>
+    <string name="faq_a_security">L\'application nécessite un mot de passe pour se connecter. Seul le personnel autorisé peut y accéder. L\'administrateur peut changer le mot de passe à tout moment depuis les Paramètres.</string>
+
+    <string name="faq_q_forgot_pw">Que se passe-t-il si j\'oublie le mot de passe ?</string>
+    <string name="faq_a_forgot_pw">Contactez votre administrateur. Le mot de passe peut être réinitialisé depuis l\'écran Paramètres par l\'administrateur.</string>
+
+    <string name="faq_q_change_lang">Comment changer la langue ?</string>
+    <string name="faq_a_change_lang">Allez dans Paramètres et sélectionnez votre langue préférée. L\'application changera immédiatement, y compris la direction de la mise en page pour l\'arabe.</string>
+
+    <string name="faq_q_export">Puis-je exporter les enregistrements de documents ?</string>
+    <string name="faq_a_export">Oui. Depuis les Paramètres, vous pouvez exporter tous les enregistrements vers un fichier Excel.</string>
+
+    <string name="faq_q_dark_mode">L\'application prend-elle en charge le mode sombre ?</string>
+    <string name="faq_a_dark_mode">Oui. Vous pouvez basculer entre les thèmes sombre et clair dans les Paramètres.</string>
+
+    <string name="faq_q_notifications">Comment activer ou désactiver les notifications ?</string>
+    <string name="faq_a_notifications">Activez ou désactivez les notifications depuis l\'écran Paramètres.</string>
 </resources>

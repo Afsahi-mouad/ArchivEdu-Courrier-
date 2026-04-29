@@ -78,6 +78,8 @@
 
     <!-- Legacy / Layout specific strings -->
     <string name="doc_track">DocTrack</string>
+    <string name="documents">Documents</string>
+    <string name="security">Security</string>
     <string name="user_info">Director - Apr 20, 2026</string>
     <string name="user_initials">DR</string>
     <string name="total">Total</string>
@@ -86,6 +88,7 @@
     <string name="pending">Pending</string>
     <string name="search_hint">Search serial or subject...</string>
     <string name="all">All</string>
+    <string name="general_category">General</string>
     <string name="receiver">Receiver</string>
     <string name="recent_files">RECENT FILES</string>
     <string name="file_id_1">26-0001 - Apr 10</string>
@@ -144,4 +147,52 @@
     <string name="wipe_confirm_title">Are you sure?</string>
     <string name="wipe_confirm_msg">This will permanently delete all documents and photos. This action cannot be undone.</string>
     <string name="wipe_success">All data has been cleared</string>
+    <string name="help_faq">Help / FAQ</string>
+    <string name="search_faq">Search FAQ...</string>
+
+    <!-- FAQ Content -->
+    <string name="faq_q_what_is">What is File Tracker?</string>
+    <string name="faq_a_what_is">A digital document management app for administrative staff in Moroccan educational institutions. It replaces paper-based logs with a modern, organized system for tracking official documents.</string>
+
+    <string name="faq_q_who_can_use">Who can use File Tracker?</string>
+    <string name="faq_a_who_can_use">Only authorized administrative staff. Access is protected by a password set and managed by the admin.</string>
+
+    <string name="faq_q_languages">What languages does the app support?</string>
+    <string name="faq_a_languages">Arabic (with RTL layout), French, English, German, and Spanish. The full interface switches language and direction.</string>
+
+    <string name="faq_q_register">How do I register a new document?</string>
+    <string name="faq_a_register">Open the app, tap \"Register Document\", and fill in the government serial number, internal serial number, sender (Academy, Prefecture, Ministry, etc.), subject, priority level, destination department, dates, receiver name, and optionally attach photos or a PDF.</string>
+
+    <string name="faq_q_priority">What is the difference between Normal and Urgent priority?</string>
+    <string name="faq_a_priority">Normal documents follow standard processing. Urgent documents are highlighted in red across the app — in the dashboard, calendar, and department views — so staff can identify and act on them immediately.</string>
+
+    <string name="faq_q_attachments">Can I attach files to a document record?</string>
+    <string name="faq_a_attachments">Yes. You can attach photos or PDF files when registering or editing a document.</string>
+
+    <string name="faq_q_find_date">How do I find a document from a specific date?</string>
+    <string name="faq_a_find_date">Go to the Calendar view, tap any date, and all documents registered that day will appear. Urgent ones show in red, Normal in green.</string>
+
+    <string name="faq_q_dashboard_show">What does the Dashboard show?</string>
+    <string name="faq_a_dashboard_show">The home screen shows the total documents registered today, how many are Urgent, and how many are Normal. Tapping each counter filters the document list accordingly.</string>
+
+    <string name="faq_q_sector_dash">What is the Sector Dashboard?</string>
+    <string name="faq_a_sector_dash">It organizes documents by department (e.g., Educational Affairs, Planning, Finance) so department heads can quickly see all documents assigned to them.</string>
+
+    <string name="faq_q_security">How is the app secured?</string>
+    <string name="faq_a_security">The app requires a password to log in. Only authorized staff can access it. The admin can change the password at any time from Settings.</string>
+
+    <string name="faq_q_forgot_pw">What happens if I forget the password?</string>
+    <string name="faq_a_forgot_pw">Contact your administrator. The password can be reset from the Settings screen by the admin.</string>
+
+    <string name="faq_q_change_lang">How do I change the language?</string>
+    <string name="faq_a_change_lang">Go to Settings and select your preferred language. The app will immediately switch including layout direction for Arabic.</string>
+
+    <string name="faq_q_export">Can I export document records?</string>
+    <string name="faq_a_export">Yes. From Settings, you can export all records to an Excel file.</string>
+
+    <string name="faq_q_dark_mode">Does the app support dark mode?</string>
+    <string name="faq_a_dark_mode">Yes. You can switch between dark and light themes in Settings.</string>
+
+    <string name="faq_q_notifications">How do I enable or disable notifications?</string>
+    <string name="faq_a_notifications">Toggle notifications on or off from the Settings screen.</string>
 </resources>

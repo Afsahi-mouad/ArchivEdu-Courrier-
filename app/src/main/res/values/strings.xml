@@ -81,6 +81,8 @@
     <string name="security_alert">تنبيه أمني</string>
     <string name="security_desc">تم تغيير كلمة مرور حسابك للتو. إذا لم تقم بذلك، يرجى الاتصال بالدعم.</string>
     <string name="doc_track">تتبع الوثائق</string>
+    <string name="documents">الوثائق</string>
+    <string name="security">الأمان</string>
     <string name="user_info">المدير - 20 أبريل 2026</string>
     <string name="user_initials">مد</string>
     <string name="total">الإجمالي</string>
@@ -89,6 +91,7 @@
     <string name="pending">قيد الانتظار</string>
     <string name="search_hint">بحث عن رقم تسلسلي أو موضوع...</string>
     <string name="all">الكل</string>
+    <string name="general_category">عام</string>
     <string name="receiver">المستلم</string>
     <string name="recent_files">الملفات الأخيرة</string>
     <string name="file_id_1">26-0001 - 10 أبريل</string>
@@ -142,4 +145,52 @@
     <string name="wipe_confirm_title">هل أنت متأكد؟</string>
     <string name="wipe_confirm_msg">سيؤدي هذا الإجراء إلى حذف جميع الوثائق والصور بشكل دائم. لا يمكن التراجع عن هذا الفعل.</string>
     <string name="wipe_success">تم مسح جميع البيانات بنجاح</string>
+    <string name="help_faq">المساعدة / الأسئلة الشائعة</string>
+    <string name="search_faq">البحث في الأسئلة...</string>
+
+    <!-- FAQ Content -->
+    <string name="faq_q_what_is">ما هو تتبع الملفات؟</string>
+    <string name="faq_a_what_is">تطبيق رقمي لإدارة المستندات للموظفين الإداريين في المؤسسات التعليمية المغربية. يستبدل السجلات الورقية بنظام حديث ومنظم لتتبع الوثائق الرسمية.</string>
+
+    <string name="faq_q_who_can_use">من يمكنه استخدام تتبع الملفات؟</string>
+    <string name="faq_a_who_can_use">الموظفون الإداريون المصرح لهم فقط. الوصول محمي بكلمة مرور يتم تعيينها وإدارتها من قبل المسؤول.</string>
+
+    <string name="faq_q_languages">ما هي اللغات التي يدعمها التطبيق؟</string>
+    <string name="faq_a_languages">العربية (مع تخطيط من اليمين إلى اليسار)، الفرنسية، الإنجليزية، الألمانية، والإسبانية. تتغير الواجهة بالكامل عند تغيير اللغة والاتجاه.</string>
+
+    <string name="faq_q_register">كيف أقوم بتسجيل وثيقة جديدة؟</string>
+    <string name="faq_a_register">افتح التطبيق، اضغط على \"تسجيل وثيقة\"، واملأ الرقم التسلسلي الحكومي، الرقم التسلسلي الداخلي، المرسل (أكاديمية، عمالة، وزارة، إلخ)، الموضوع، مستوى الأولوية، المصلحة المستهدفة، التواريخ، اسم المستلم، ويمكنك اختيارياً إرفاق صور أو ملف PDF.</string>
+
+    <string name="faq_q_priority">ما الفرق بين الأولوية العادية والعاجلة؟</string>
+    <string name="faq_a_priority">الوثائق العادية تتبع المعالجة القياسية. الوثائق العاجلة تبرز باللون الأحمر في جميع أنحاء التطبيق - في لوحة التحكم، التقويم، وعروض المصالح - حتى يتمكن الموظفون من التعرف عليها والعمل عليها فوراً.</string>
+
+    <string name="faq_q_attachments">هل يمكنني إرفاق ملفات بسجل الوثيقة؟</string>
+    <string name="faq_a_attachments">نعم. يمكنك إرفاق صور أو ملفات PDF عند تسجيل أو تعديل وثيقة.</string>
+
+    <string name="faq_q_find_date">كيف أجد وثيقة من تاريخ معين؟</string>
+    <string name="faq_a_find_date">انتقل إلى عرض التقويم، واضغط على أي تاريخ، وستظهر جميع الوثائق المسجلة في ذلك اليوم. تظهر الوثائق العاجلة باللون الأحمر، والعادية باللون الأخضر.</string>
+
+    <string name="faq_q_dashboard_show">ماذا تظهر لوحة التحكم؟</string>
+    <string name="faq_a_dashboard_show">تظهر الشاشة الرئيسية إجمالي الوثائق المسجلة اليوم، وعدد الوثائق العاجلة، وعدد الوثائق العادية. الضغط على كل عداد يصفي قائمة الوثائق وفقاً لذلك.</string>
+
+    <string name="faq_q_sector_dash">ما هي لوحة تحكم المصالح؟</string>
+    <string name="faq_a_sector_dash">تنظم الوثائق حسب المصلحة (مثلاً: الشؤون التربوية، التخطيط، المالية) بحيث يمكن لرؤساء المصالح رؤية جميع الوثائق المخصصة لهم بسرعة.</string>
+
+    <string name="faq_q_security">كيف يتم تأمين التطبيق؟</string>
+    <string name="faq_a_security">يتطلب التطبيق كلمة مرور لتسجيل الدخول. يمكن للموظفين المصرح لهم فقط الوصول إليه. يمكن للمسؤول تغيير كلمة المرور في أي وقت من الإعدادات.</string>
+
+    <string name="faq_q_forgot_pw">ماذا يحدث إذا نسيت كلمة المرور؟</string>
+    <string name="faq_a_forgot_pw">اتصل بالمسؤول الخاص بك. يمكن للمسؤول إعادة تعيين كلمة المرور من شاشة الإعدادات.</string>
+
+    <string name="faq_q_change_lang">كيف أغير اللغة؟</string>
+    <string name="faq_a_change_lang">انتقل إلى الإعدادات واختر لغتك المفضلة. سيتغير التطبيق فوراً بما في ذلك اتجاه التخطيط للغة العربية.</string>
+
+    <string name="faq_q_export">هل يمكنني تصدير سجلات الوثائق؟</string>
+    <string name="faq_a_export">نعم. من الإعدادات، يمكنك تصدير جميع السجلات إلى ملف Excel.</string>
+
+    <string name="faq_q_dark_mode">هل يدعم التطبيق الوضع الداكن؟</string>
+    <string name="faq_a_dark_mode">نعم. يمكنك التبديل بين المظهرين الداكن والفاتح في الإعدادات.</string>
+
+    <string name="faq_q_notifications">كيف يمكنني تفعيل أو تعطيل الإشعارات؟</string>
+    <string name="faq_a_notifications">قم بتبديل الإشعارات من شاشة الإعدادات.</string>
 </resources>

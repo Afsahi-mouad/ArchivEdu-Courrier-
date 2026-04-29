@@ -27,13 +27,27 @@ val SurfaceLight = Color(0xFFF8F9FA)
 val SurfaceVariantLight = Color(0xFFE3E3E3)
 val BackgroundLight = Color(0xFFF5F5F5)
 
-// Dark Theme
-val PrimaryDark = Color(0xFF90CAF9)
-val OnPrimaryDark = Color(0xFF003258)
-val PrimaryContainerDark = Color(0xFF00497D)
-val OnPrimaryContainerDark = Color(0xFFD1E4FF)
+// Dark Theme Palette
+val DarkBg = Color(0xFF121212)
+val DarkSurface = Color(0xFF1E1E1E)
+val TextPrimaryDark = Color(0xFFE8E8E8)
+val TextSecondaryDark = Color(0xFF9E9E9E)
+val AccentGreen = Color(0xFF00E5A0)
+val AccentGreenTranslucent = Color(0x3300E5A0)
+val ButtonTextDark = Color(0xFF000000)
+
+// Dark Theme (Material 3 Mapping)
+val PrimaryDark = AccentGreen
+val OnPrimaryDark = ButtonTextDark
+val PrimaryContainerDark = AccentGreenTranslucent
+val OnPrimaryContainerDark = AccentGreen
 
 val SecondaryDark = Color(0xFF80CBC4)
-val SurfaceDark = Color(0xFF1C1B1F)
-val SurfaceVariantDark = Color(0xFF49454F)
-val BackgroundDark = Color(0xFF121212)
+val SurfaceDark = DarkBg
+val SurfaceVariantDark = DarkSurface
+val BackgroundDark = DarkBg
+
+val OnBackgroundDark = TextPrimaryDark
+val OnSurfaceDark = TextPrimaryDark
+val OnSurfaceVariantDark = TextSecondaryDark
+

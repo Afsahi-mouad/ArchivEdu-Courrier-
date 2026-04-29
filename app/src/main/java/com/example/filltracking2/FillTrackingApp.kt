@@ -217,8 +217,12 @@ fun FillTrackingApp() {
                                 viewModel = fileViewModel,
                                 currentUserEmail = currentUserEmail,
                                 currentPassword = persistedPassword,
-                                onSignOut = { isLoggedIn = false }
+                                onSignOut = { isLoggedIn = false },
+                                onNavigateToFaq = { navController.navigate("faq") }
                             )
+                        }
+                        composable("faq") {
+                            FaqScreen(onNavigateBack = { navController.popBackStack() })
                         }
                         composable("new_file") {
                             NewFileScreen(

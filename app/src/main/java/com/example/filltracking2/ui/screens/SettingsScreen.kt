@@ -58,7 +58,8 @@ fun SettingsScreen(
     viewModel: FileViewModel,
     currentUserEmail: String,
     currentPassword: String,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit,
+    onNavigateToFaq: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -400,7 +401,11 @@ fun SettingsScreen(
 
             // About Group
             SettingsSection(title = stringResource(R.string.about)) {
-                SettingsItem(icon = Icons.AutoMirrored.Filled.Help, title = "Help / FAQ")
+                SettingsItem(
+                    icon = Icons.AutoMirrored.Filled.Help,
+                    title = stringResource(R.string.help_faq),
+                    onClick = onNavigateToFaq
+                )
                 
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
