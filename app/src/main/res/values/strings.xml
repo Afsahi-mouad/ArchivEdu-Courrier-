@@ -62,6 +62,15 @@
     <string name="file_tracker">تتبع الملفات</string>
     <string name="view_director">المدير (الرئيسية)</string>
     <string name="view_sector">عرض المصالح</string>
+    <string name="analytics">الإحصائيات</string>
+    <string name="priority_distribution">توزيع الأولويات</string>
+    <string name="sector_overview">نظرة عامة على المصالح</string>
+    <string name="no_data_yet">لا توجد بيانات بعد</string>
+    <string name="status_breakdown">توزيع الحالات</string>
+    <string name="cumulative_completions">الإنجازات التراكمية</string>
+    <string name="top_sectors">أبرز المصالح</string>
+    <string name="other">أخرى</string>
+    <string name="not_enough_data">لا توجد بيانات كافية بعد</string>
 
     <string name="sector_educational_affairs">شؤون تربوية</string>
     <string name="sector_planning">التخطيط</string>
@@ -74,6 +83,11 @@
     <string name="sector_legal_affairs">الشؤون القانونية والتواصل والشراكة</string>
     <string name="sector_hr_management">تدبير الموارد البشرية</string>
     <string name="sector_inspection">المفتشية</string>
+    <string name="sector_security">الأمن</string>
+    <string name="sector_admin">الإدارة</string>
+    <string name="sector_operations">العمليات</string>
+    <string name="sector_general">عام</string>
+    <string name="sector_technical">التقنية</string>
 
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="reset_info">أدخل 0000 لإعادة تعيين كلمة المرور</string>

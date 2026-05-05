@@ -33,6 +33,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.compose.material.icons.filled.Business
+import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.outlined.BarChart
 import com.example.filltracking2.ui.screens.*
 import com.example.filltracking2.ui.theme.FillTrackingTheme
 import com.example.filltracking2.ui.viewmodel.FileViewModel
@@ -46,8 +50,19 @@ sealed class Screen(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 ) {
-    object Dashboard : Screen("dashboard", "Home", Icons.Filled.Dashboard, Icons.Outlined.Dashboard)
+    object Dashboard : Screen("dashboard?view={view}&sector={sector}", "Home", Icons.Filled.Dashboard, Icons.Outlined.Dashboard) {
+        fun createRoute(view: String? = null, sector: String? = null): String {
+            val viewPart = if (view != null) "view=$view" else ""
+            val sectorPart = if (sector != null) "sector=$sector" else ""
+            val query = listOf(viewPart, sectorPart).filter { it.isNotEmpty() }.joinToString("&")
+            return if (query.isNotEmpty()) "dashboard?$query" else "dashboard"
+        }
+    }
     object History : Screen("history", "History", Icons.Filled.History, Icons.Outlined.History)
+    object Analytics : Screen("analytics", "Analytics", Icons.Filled.BarChart, Icons.Outlined.BarChart)
+    object SectorView : Screen("sector_view/{sectorName}", "Sector View", Icons.Filled.Business, Icons.Outlined.Business) {
+        fun createRoute(sectorName: String) = "sector_view/$sectorName"
+    }
     object Settings : Screen("settings", "Settings", Icons.Filled.Settings, Icons.Outlined.Settings)
 }
 
@@ -106,8 +121,8 @@ fun FillTrackingApp() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 
-                val bottomNavItems = listOf(Screen.Dashboard, Screen.History, Screen.Settings)
-                val showBottomBar = currentDestination?.route in bottomNavItems.map { it.route }
+                val bottomNavItems = listOf(Screen.Dashboard, Screen.History, Screen.Analytics, Screen.Settings)
+                val showBottomBar = currentDestination?.route?.split("?")?.firstOrNull() in bottomNavItems.map { it.route.split("?").first() }
                 
                 Scaffold(
                     bottomBar = {
@@ -118,7 +133,7 @@ fun FillTrackingApp() {
                             ) {
                                 bottomNavItems.forEach { screen ->
                                     val selected = currentDestination?.hierarchy?.any { 
-                                        it.route == screen.route 
+                                        it.route?.split("?")?.firstOrNull() == screen.route.split("?").first()
                                     } == true
                                     
                                     NavigationBarItem(
@@ -132,6 +147,7 @@ fun FillTrackingApp() {
                                             val stringResId = when(screen.route) {
                                                 "dashboard" -> R.string.dashboard
                                                 "history" -> R.string.history
+                                                "analytics" -> R.string.analytics
                                                 "settings" -> R.string.settings
                                                 else -> R.string.home
                                             }
@@ -194,12 +210,41 @@ fun FillTrackingApp() {
                             )
                         }
                     ) {
-                        composable(Screen.Dashboard.route) {
+                        composable(
+                            route = Screen.Dashboard.route,
+                            arguments = listOf(
+                                navArgument("view") { type = NavType.StringType; nullable = true },
+                                navArgument("sector") { type = NavType.StringType; nullable = true }
+                            )
+                        ) { backStackEntry ->
+                            val viewArg = backStackEntry.arguments?.getString("view") ?: "Director"
+                            val sectorArg = backStackEntry.arguments?.getString("sector")
+                            
                             DashboardScreen(
                                 viewModel = fileViewModel,
+                                initialView = viewArg,
+                                initialSector = sectorArg,
                                 onFileClick = { record ->
                                     val encoded = Uri.encode(record.internalSerial)
                                     navController.navigate("file_detail/$encoded")
+                                },
+                                onNavigateToAnalytics = {
+                                    navController.navigate(Screen.Analytics.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                onNavigateToSectorView = { sector ->
+                                    navController.navigate(Screen.SectorView.createRoute(sector ?: "")) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
                             )
                         }
@@ -210,6 +255,29 @@ fun FillTrackingApp() {
                                     val encoded = Uri.encode(record.internalSerial)
                                     navController.navigate("file_detail/$encoded")
                                 }
+                            )
+                        }
+                        composable(Screen.Analytics.route) {
+                            AnalyticsScreen(
+                                viewModel = fileViewModel,
+                                onSectorClick = { sector ->
+                                    navController.navigate(Screen.SectorView.createRoute(sector))
+                                }
+                            )
+                        }
+                        composable(
+                            route = Screen.SectorView.route,
+                            arguments = listOf(navArgument("sectorName") { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            val sectorName = backStackEntry.arguments?.getString("sectorName") ?: ""
+                            SectorViewScreen(
+                                viewModel = fileViewModel,
+                                filterBySector = sectorName,
+                                onFileClick = { record ->
+                                    val encoded = Uri.encode(record.internalSerial)
+                                    navController.navigate("file_detail/$encoded")
+                                },
+                                onNavigateBack = { navController.popBackStack() }
                             )
                         }
                         composable(Screen.Settings.route) {

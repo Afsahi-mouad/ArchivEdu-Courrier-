@@ -62,6 +62,15 @@
     <string name="file_tracker">FILE TRACKER</string>
     <string name="view_director">Director (Home)</string>
     <string name="view_sector">Sector View</string>
+    <string name="analytics">Analytics</string>
+    <string name="priority_distribution">Priority Distribution</string>
+    <string name="sector_overview">Sector Overview</string>
+    <string name="no_data_yet">No data yet</string>
+    <string name="status_breakdown">Status Breakdown</string>
+    <string name="cumulative_completions">Cumulative Completions</string>
+    <string name="top_sectors">Top Sectors</string>
+    <string name="other">Other</string>
+    <string name="not_enough_data">Not enough data yet</string>
 
     <!-- Sectors -->
     <string name="sector_educational_affairs">Educational Affairs</string>
@@ -75,6 +84,11 @@
     <string name="sector_legal_affairs">Legal Affairs, Communication &amp; Partnership</string>
     <string name="sector_hr_management">HR Management</string>
     <string name="sector_inspection">Inspection</string>
+    <string name="sector_security">Security</string>
+    <string name="sector_admin">Admin</string>
+    <string name="sector_operations">Operations</string>
+    <string name="sector_general">General</string>
+    <string name="sector_technical">Technical</string>
 
     <!-- Legacy / Layout specific strings -->
     <string name="doc_track">DocTrack</string>

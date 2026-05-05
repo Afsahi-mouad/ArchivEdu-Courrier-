@@ -61,6 +61,15 @@
     <string name="file_tracker">SUIVI DES FICHIERS</string>
     <string name="view_director">Directeur (Accueil)</string>
     <string name="view_sector">Vue par secteur</string>
+    <string name="analytics">Statistiques</string>
+    <string name="priority_distribution">Répartition des priorités</string>
+    <string name="sector_overview">Aperçu du secteur</string>
+    <string name="no_data_yet">Pas encore de données</string>
+    <string name="status_breakdown">Répartition des statuts</string>
+    <string name="cumulative_completions">Complétions cumulatives</string>
+    <string name="top_sectors">Secteurs principaux</string>
+    <string name="other">Autres</string>
+    <string name="not_enough_data">Pas encore assez de données</string>
 
     <string name="sector_educational_affairs">Affaires Pédagogiques</string>
     <string name="sector_planning">Planification</string>
@@ -73,6 +82,11 @@
     <string name="sector_legal_affairs">Affaires Juridiques, Communication et Partenariat</string>
     <string name="sector_hr_management">Gestion des Ressources Humaines</string>
     <string name="sector_inspection">Inspection</string>
+    <string name="sector_security">Sécurité</string>
+    <string name="sector_admin">Administration</string>
+    <string name="sector_operations">Opérations</string>
+    <string name="sector_general">Général</string>
+    <string name="sector_technical">Technique</string>
 
     <string name="forgot_password">Mot de passe oublié ?</string>
     <string name="reset_info">Entrez 0000 pour réinitialiser le mot de passe</string>

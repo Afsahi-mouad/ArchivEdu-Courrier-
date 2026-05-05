@@ -60,15 +60,16 @@ fun HistoryScreen(
     val visibleMonth = state.firstVisibleMonth.yearMonth
     
     val recordsByDate = remember(allRecords) {
-        val formatterPadded = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH)
-        val formatterShort = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
-        allRecords.groupBy { 
-            try {
-                LocalDate.parse(it.dateRegistered, formatterPadded)
-            } catch (e: Exception) {
+        val formatters = listOf(
+            DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+        )
+        allRecords.groupBy { record ->
+            formatters.firstNotNullOfOrNull { formatter ->
                 try {
-                    LocalDate.parse(it.dateRegistered, formatterShort)
-                } catch (e2: Exception) {
+                    LocalDate.parse(record.dateReceivedGov, formatter)
+                } catch (e: Exception) {
                     null
                 }
             }
@@ -174,7 +175,7 @@ fun Day(day: CalendarDay, isSelected: Boolean, records: List<FileRecord>, onClic
                                     .clip(CircleShape)
                                     .background(
                                         if (record.urgency == "Urgent") StatusUrgent 
-                                        else StatusProcessed
+                                        else Color(0xFF4DB6AC)
                                     )
                             )
                         }
@@ -182,7 +183,7 @@ fun Day(day: CalendarDay, isSelected: Boolean, records: List<FileRecord>, onClic
                 } else {
                     val urgentCount = records.count { it.urgency == "Urgent" }
                     val dominantColor = if (urgentCount > 0) StatusUrgent 
-                                        else StatusProcessed
+                                        else Color(0xFF4DB6AC)
                     Text(
                         text = "${records.size}+",
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),

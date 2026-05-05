@@ -62,6 +62,15 @@
     <string name="file_tracker">RASTREADOR DE ARCHIVOS</string>
     <string name="view_director">Director (Inicio)</string>
     <string name="view_sector">Vista por sector</string>
+    <string name="analytics">Estadísticas</string>
+    <string name="priority_distribution">Distribución de prioridades</string>
+    <string name="sector_overview">Resumen del sector</string>
+    <string name="no_data_yet">Aún no hay datos</string>
+    <string name="status_breakdown">Desglose de estado</string>
+    <string name="cumulative_completions">Finalizaciones acumuladas</string>
+    <string name="top_sectors">Sectores principales</string>
+    <string name="other">Otros</string>
+    <string name="not_enough_data">Aún no hay suficientes datos</string>
 
     <string name="sector_educational_affairs">Asuntos educativos</string>
     <string name="sector_planning">Planificación</string>
@@ -74,6 +83,11 @@
     <string name="sector_legal_affairs">Asuntos legales, comunicación y asociación</string>
     <string name="sector_hr_management">Gestión de RRHH</string>
     <string name="sector_inspection">Inspección</string>
+    <string name="sector_security">Seguridad</string>
+    <string name="sector_admin">Administración</string>
+    <string name="sector_operations">Operaciones</string>
+    <string name="sector_general">General</string>
+    <string name="sector_technical">Técnico</string>
 
     <string name="doc_track">DocTrack</string>
     <string name="documents">Documentos</string>

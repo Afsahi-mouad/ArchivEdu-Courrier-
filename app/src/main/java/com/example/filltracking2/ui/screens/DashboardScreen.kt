@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,6 +13,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.ListAlt
+import androidx.compose.material.icons.automirrored.outlined.ListAlt
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
@@ -42,18 +45,30 @@ private val sectorMap = mapOf(
     "Exams" to R.string.sector_exams,
     "Legal Affairs" to R.string.sector_legal_affairs,
     "HR Management" to R.string.sector_hr_management,
-    "Inspection" to R.string.sector_inspection
+    "Inspection" to R.string.sector_inspection,
+    "Security" to R.string.sector_security,
+    "Admin" to R.string.sector_admin,
+    "Operations" to R.string.sector_operations,
+    "General" to R.string.sector_general,
+    "Technical" to R.string.sector_technical
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     viewModel: FileViewModel,
-    onFileClick: (FileRecord) -> Unit
+    onFileClick: (FileRecord) -> Unit,
+    onNavigateToAnalytics: () -> Unit,
+    onNavigateToSectorView: (String?) -> Unit,
+    initialView: String = "Director",
+    initialSector: String? = null
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    var currentView by remember { mutableStateOf("Director") }
+    // currentView is no longer strictly needed if we navigate away for Sector View,
+    // but we'll keep it for internal state if someone clicks the drawer item.
+    // However, navigation is better for deep linking.
+    var currentView by remember { mutableStateOf(initialView) }
     
     val records by viewModel.records.collectAsState()
     
@@ -63,7 +78,7 @@ fun DashboardScreen(
     var selectedFilter by remember { mutableStateOf("All") }
     
     val allSectors = sectorMap.keys.toList()
-    var selectedSectorTab by remember { mutableStateOf(allSectors[0]) } 
+    var selectedSectorTab by remember { mutableStateOf(initialSector ?: allSectors[0]) } 
     
     val filteredRecords = remember(records, searchQuery, selectedFilter, currentView, selectedSectorTab, selectedYear) {
         records.filter { record ->
@@ -113,9 +128,21 @@ fun DashboardScreen(
                 )
                 NavigationDrawerItem(
                     label = { Text(stringResource(R.string.view_sector)) },
-                    selected = currentView == "Sector view",
-                    onClick = { currentView = "Sector view"; scope.launch { drawerState.close() } },
+                    selected = false,
+                    onClick = { 
+                        onNavigateToSectorView(null)
+                        scope.launch { drawerState.close() } 
+                    },
                     icon = { Icon(Icons.Default.Business, null) }
+                )
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.analytics)) },
+                    selected = false,
+                    onClick = { 
+                        onNavigateToAnalytics()
+                        scope.launch { drawerState.close() } 
+                    },
+                    icon = { Icon(Icons.Default.BarChart, null) }
                 )
             }
         }
@@ -149,28 +176,6 @@ fun DashboardScreen(
             }
         ) { padding ->
             Column(modifier = Modifier.fillMaxSize().padding(padding)) {
-                if (currentView == "Sector view") {
-                    ScrollableTabRow(
-                        selectedTabIndex = allSectors.indexOf(selectedSectorTab).coerceAtLeast(0),
-                        edgePadding = 16.dp,
-                        containerColor = Color.Transparent,
-                        indicator = { tabPositions ->
-                            val index = allSectors.indexOf(selectedSectorTab)
-                            if (index != -1) {
-                                TabRowDefaults.SecondaryIndicator(Modifier.tabIndicatorOffset(tabPositions[index]))
-                            }
-                        }
-                    ) {
-                        allSectors.forEach { sectorKey ->
-                            Tab(
-                                selected = selectedSectorTab == sectorKey,
-                                onClick = { selectedSectorTab = sectorKey },
-                                text = { Text(stringResource(sectorMap[sectorKey]!!)) }
-                            )
-                        }
-                    }
-                }
-
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(16.dp),
@@ -268,7 +273,8 @@ fun StatCard(title: String, count: Int, icon: ImageVector, color: Color, isSelec
         onClick = onClick,
         modifier = Modifier.width(140.dp).height(100.dp),
         colors = CardDefaults.cardColors(containerColor = if (isSelected) color.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surface),
-        border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, color.copy(alpha = 0.5f)) else null
+        border = if (isSelected) androidx.compose.foundation.BorderStroke(2.dp, color.copy(alpha = 0.5f)) 
+                 else androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -286,7 +292,13 @@ fun StatCard(title: String, count: Int, icon: ImageVector, color: Color, isSelec
 fun FileCard(record: FileRecord, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.5.dp,
+                color = Color(0xFF4DB6AC),
+                shape = RoundedCornerShape(16.dp)
+            ),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
