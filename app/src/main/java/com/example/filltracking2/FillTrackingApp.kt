@@ -60,8 +60,8 @@ sealed class Screen(
     }
     object History : Screen("history", "History", Icons.Filled.History, Icons.Outlined.History)
     object Analytics : Screen("analytics", "Analytics", Icons.Filled.BarChart, Icons.Outlined.BarChart)
-    object SectorView : Screen("sector_view/{sectorName}", "Sector View", Icons.Filled.Business, Icons.Outlined.Business) {
-        fun createRoute(sectorName: String) = "sector_view/$sectorName"
+    object SectorView : Screen("sector_view", "Sector View", Icons.Filled.Business, Icons.Outlined.Business) {
+        fun createRoute(sectorName: String) = if (sectorName.isEmpty()) "sector_view" else "sector_view/$sectorName"
     }
     object Settings : Screen("settings", "Settings", Icons.Filled.Settings, Icons.Outlined.Settings)
 }
@@ -221,30 +221,13 @@ fun FillTrackingApp() {
                             val sectorArg = backStackEntry.arguments?.getString("sector")
                             
                             DashboardScreen(
+                                navController = navController,
                                 viewModel = fileViewModel,
                                 initialView = viewArg,
                                 initialSector = sectorArg,
                                 onFileClick = { record ->
                                     val encoded = Uri.encode(record.internalSerial)
                                     navController.navigate("file_detail/$encoded")
-                                },
-                                onNavigateToAnalytics = {
-                                    navController.navigate(Screen.Analytics.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                },
-                                onNavigateToSectorView = { sector ->
-                                    navController.navigate(Screen.SectorView.createRoute(sector ?: "")) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
                                 }
                             )
                         }
@@ -265,8 +248,19 @@ fun FillTrackingApp() {
                                 }
                             )
                         }
+                        composable(Screen.SectorView.route) {
+                            SectorViewScreen(
+                                viewModel = fileViewModel,
+                                filterBySector = "",
+                                onFileClick = { record ->
+                                    val encoded = Uri.encode(record.internalSerial)
+                                    navController.navigate("file_detail/$encoded")
+                                },
+                                onNavigateBack = { navController.popBackStack() }
+                            )
+                        }
                         composable(
-                            route = Screen.SectorView.route,
+                            route = "sector_view/{sectorName}",
                             arguments = listOf(navArgument("sectorName") { type = NavType.StringType })
                         ) { backStackEntry ->
                             val sectorName = backStackEntry.arguments?.getString("sectorName") ?: ""

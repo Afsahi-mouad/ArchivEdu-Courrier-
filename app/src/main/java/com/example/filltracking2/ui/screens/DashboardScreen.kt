@@ -28,6 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.filltracking2.Screen
 import com.example.filltracking2.R
 import com.example.filltracking2.data.FileRecord
 import com.example.filltracking2.ui.theme.*
@@ -56,10 +58,9 @@ private val sectorMap = mapOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
+    navController: NavController,
     viewModel: FileViewModel,
     onFileClick: (FileRecord) -> Unit,
-    onNavigateToAnalytics: () -> Unit,
-    onNavigateToSectorView: (String?) -> Unit,
     initialView: String = "Director",
     initialSector: String? = null
 ) {
@@ -130,8 +131,12 @@ fun DashboardScreen(
                     label = { Text(stringResource(R.string.view_sector)) },
                     selected = false,
                     onClick = { 
-                        onNavigateToSectorView(null)
-                        scope.launch { drawerState.close() } 
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate("sector_view") {
+                                launchSingleTop = true
+                            }
+                        }
                     },
                     icon = { Icon(Icons.Default.Business, null) }
                 )
@@ -139,8 +144,12 @@ fun DashboardScreen(
                     label = { Text(stringResource(R.string.analytics)) },
                     selected = false,
                     onClick = { 
-                        onNavigateToAnalytics()
-                        scope.launch { drawerState.close() } 
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate(Screen.Analytics.route) {
+                                launchSingleTop = true
+                            }
+                        }
                     },
                     icon = { Icon(Icons.Default.BarChart, null) }
                 )
