@@ -22,6 +22,16 @@ val StatusPending = Color(0xFF78909C)      // Blue Grey
 val StatusProcessed = Color(0xFF66BB6A)    // Green
 val StatusUrgent = Color(0xFFEF5350)       // Red
 
+// Moroccan Government Colors (Tailwind Export)
+val MoroccoPrimary = Color(0xFF004824)
+val MoroccoPrimaryContainer = Color(0xFF006233)
+val MoroccoSecondary = Color(0xFFB71F27)
+val MoroccoTertiary = Color(0xFF6E232D)
+val MoroccoSurface = Color(0xFFF8F9FA)
+val MoroccoOnSurface = Color(0xFF191C1D)
+val MoroccoOutline = Color(0xFF6F7A70)
+val MoroccoSurfaceContainerLowest = Color(0xFFFFFFFF)
+
 // Surface Colors
 val SurfaceLight = Color(0xFFF8F9FA)
 val SurfaceVariantLight = Color(0xFFE3E3E3)

@@ -204,4 +204,22 @@
 
     <string name="faq_q_notifications">Comment activer ou désactiver les notifications ?</string>
     <string name="faq_a_notifications">Activez ou désactivez les notifications depuis l\'écran Paramètres.</string>
+
+    <!-- Login Screen Moroccan Government Branding -->
+    <string name="morocco_kingdom">Royaume du Maroc</string>
+    <string name="ministry_name">Ministère de l\'Éducation Nationale, du Préscolaire et des Sports</string>
+    <string name="regional_academy">Académie Régionale d\'Éducation et de Formation</string>
+    <string name="directorate_info">Région Souss Massa, Direction Provinciale Inezgane Ait Melloul</string>
+    <string name="secure_login">Connexion Sécurisée</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="username_placeholder">Entrez le nom d\'utilisateur</string>
+    <string name="password_placeholder">Entrez le mot de passe</string>
+    <string name="login_action">Se connecter</string>
+    <string name="footer_copyright">© 2026 Royaume du Maroc</string>
+    <string name="footer_portal">Portail des Services Administratifs Numériques</string>
+    <string name="privacy_policy">Politique de Confidentialité</string>
+    <string name="terms_of_use">Conditions d\'Utilisation</string>
+    <string name="help">Aide</string>
+    <string name="remember_me">Se souvenir de moi</string>
+    <string name="pin_code">Code PIN</string>
 </resources>

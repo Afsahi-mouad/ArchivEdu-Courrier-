@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "fill tracking 2"
+rootProject.name = "ArchivEdu-Courrier-"
 include(":app")

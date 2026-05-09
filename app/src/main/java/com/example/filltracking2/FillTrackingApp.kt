@@ -43,6 +43,8 @@ import com.example.filltracking2.ui.viewmodel.FileViewModel
 import com.example.filltracking2.ui.theme.ThemeManager
 import com.example.filltracking2.util.PreferenceManager
 import com.example.filltracking2.util.LocaleManager
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
 
 sealed class Screen(
     val route: String,
@@ -70,9 +72,14 @@ sealed class Screen(
 @Composable
 fun FillTrackingApp() {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val fileViewModel: FileViewModel = viewModel()
-    var isLoggedIn by rememberSaveable { mutableStateOf(false) }
-    var currentUserEmail by rememberSaveable { mutableStateOf("") }
+    
+    val isLoggedInPersisted by PreferenceManager.isLoggedIn(context).collectAsStateWithLifecycle(initialValue = false)
+    val currentUserEmailPersisted by PreferenceManager.getCurrentUserEmail(context).collectAsStateWithLifecycle(initialValue = "")
+    
+    var isLoggedIn by rememberSaveable(isLoggedInPersisted) { mutableStateOf(isLoggedInPersisted) }
+    var currentUserEmail by rememberSaveable(currentUserEmailPersisted) { mutableStateOf(currentUserEmailPersisted) }
 
     val currentLocaleCode by PreferenceManager.getLocale(context).collectAsStateWithLifecycle(initialValue = null)
 
@@ -107,16 +114,24 @@ fun FillTrackingApp() {
             .getPassword(LocalContext.current)
             .collectAsStateWithLifecycle(initialValue = "admin")
 
-        if (!isLoggedIn) {
-            LoginScreen(
-                currentPassword = persistedPassword,
-                onLoginSuccess = { email ->
-                    currentUserEmail = email
-                    isLoggedIn = true
+        FillTrackingTheme(darkTheme = ThemeManager.isDarkTheme) {
+            if (!isLoggedIn) {
+                var showFaqOnLogin by remember { mutableStateOf(false) }
+                if (showFaqOnLogin) {
+                    FaqScreen(onNavigateBack = { showFaqOnLogin = false })
+                } else {
+                    LoginScreen(
+                        onLoginSuccess = { email ->
+                            scope.launch {
+                                PreferenceManager.setLoggedIn(context, true, email)
+                                currentUserEmail = email
+                                isLoggedIn = true
+                            }
+                        },
+                        onNavigateToFaq = { showFaqOnLogin = true }
+                    )
                 }
-            )
-        } else {
-            FillTrackingTheme(darkTheme = ThemeManager.isDarkTheme) {
+            } else {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination

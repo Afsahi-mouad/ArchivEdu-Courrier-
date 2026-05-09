@@ -17,6 +17,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -33,6 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -274,7 +278,12 @@ fun SettingsScreen(
                     icon = Icons.AutoMirrored.Filled.Logout,
                     title = stringResource(R.string.sign_out),
                     titleColor = MaterialTheme.colorScheme.error,
-                    onClick = onSignOut
+                    onClick = {
+                        scope.launch {
+                            PreferenceManager.setLoggedIn(context, false)
+                            onSignOut()
+                        }
+                    }
                 )
             }
 
@@ -414,7 +423,7 @@ fun SettingsScreen(
                     Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(16.dp))
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("Version 2.3", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                        Text("Version 3.0.0", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
                         Text(stringResource(R.string.copyright), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -546,8 +555,29 @@ private fun showChangeNotification(context: Context) {
 
 @Composable
 fun SupportContent(context: android.content.Context) {
-    Column(modifier = Modifier.padding(24.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("Support", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+    Column(
+        modifier = Modifier
+            .padding(24.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Brand Logo in Support
+        Image(
+            painter = painterResource(id = R.drawable.brand),
+            contentDescription = "Brand Logo",
+            modifier = Modifier
+                .size(80.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Fit
+        )
+
+        Text(
+            "Support",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
         
         SupportItem(icon = Icons.Default.Email, label = "Email", value = "mouadafs@gmail.com") {
             val intent = Intent(Intent.ACTION_SENDTO).apply {

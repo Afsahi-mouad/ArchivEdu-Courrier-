@@ -207,4 +207,25 @@
 
     <string name="faq_q_notifications">كيف يمكنني تفعيل أو تعطيل الإشعارات؟</string>
     <string name="faq_a_notifications">قم بتبديل الإشعارات من شاشة الإعدادات.</string>
+
+    <!-- Login Screen Moroccan Government Branding -->
+    <string name="morocco_kingdom">المملكة المغربية</string>
+    <string name="ministry_name">وزارة التربية الوطنية والتعليم الأولي والرياضة</string>
+    <string name="regional_academy">الأكاديمية الجهوية للتربية والتكوين</string>
+    <string name="directorate_info">جهة سوس ماسة ,المديرية الإقليمية إنزكان أيت ملول</string>
+    <string name="secure_login">دخول آمن</string>
+    <string name="username">اسم المستخدم (Username)</string>
+    <string name="username_placeholder">أدخل اسم المستخدم</string>
+    <string name="password_placeholder">أدخل كلمة المرور</string>
+    <string name="login_action">تسجيل الدخول</string>
+    <string name="security_badge_text">اتصال مشفر وآمن 256-بت</string>
+    <string name="footer_copyright">© 2026 المملكة المغربية</string>
+    <string name="footer_portal">بوابة الخدمات الإدارية الرقمية</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="terms_of_use">شروط الاستخدام</string>
+    <string name="help">المساعدة</string>
+    <string name="remember_me">تذكرني</string>
+    <string name="pin_code">رمز PIN</string>
+    <string name="loading">جاري التحميل...</string>
+    <string name="google_sign_in">تسجيل الدخول بواسطة Google</string>
 </resources>

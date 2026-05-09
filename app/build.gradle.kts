@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,22 +12,30 @@ android {
     namespace = "com.example.filltracking2"
     compileSdk = 35
 
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { localProperties.load(it) }
+    }
+
     defaultConfig {
         applicationId = "com.example.filltracking2"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "3.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
 // Updated signing config
     signingConfigs {
         create("release") {
-            storeFile = file("C:/Users/oussa/Documents/mykeystore/keystore1")
-            storePassword = "123456789"
-            keyAlias = "key0"
-            keyPassword = "123456789"
+            localProperties.getProperty("STORE_FILE")?.let {
+                storeFile = file(it)
+            }
+            storePassword = localProperties.getProperty("STORE_PASSWORD")
+            keyAlias = localProperties.getProperty("KEY_ALIAS")
+            keyPassword = localProperties.getProperty("KEY_PASSWORD")
         }
     }
 
