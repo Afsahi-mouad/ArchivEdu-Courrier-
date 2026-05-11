@@ -18,6 +18,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -562,15 +563,22 @@ fun SupportContent(context: android.content.Context) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Brand Logo in Support
-        Image(
-            painter = painterResource(id = R.drawable.brand),
-            contentDescription = "Brand Logo",
-            modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Fit
-        )
+        // Brand Logo in Support - Enhanced visibility
+        Surface(
+            modifier = Modifier.padding(bottom = 8.dp),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.brand),
+                contentDescription = "Brand Logo",
+                modifier = Modifier
+                    .size(140.dp)
+                    .padding(16.dp),
+                contentScale = ContentScale.Fit
+            )
+        }
 
         Text(
             "Support",
